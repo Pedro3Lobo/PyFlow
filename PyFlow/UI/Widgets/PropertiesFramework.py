@@ -13,16 +13,16 @@
 ## limitations under the License.
 
 
+from nine import str
 from PyFlow.UI.Canvas.UICommon import clearLayout
 from PyFlow.UI.Widgets.EditPropertiesWidget import EditPropertiesTreeWidget
-from qtpy import QtWidgets
-from qtpy import QtCore, QtGui
+from Qt import QtWidgets
+from Qt import QtCore, QtGui
 
 
 # Framework
 class HeadButton(QtWidgets.QPushButton):
     """docstring for HeadButton."""
-
     def __init__(self, parent=None, maxHeight=25):
         super(HeadButton, self).__init__(parent)
         self.setObjectName(self.__class__.__name__)
@@ -33,9 +33,7 @@ class HeadButton(QtWidgets.QPushButton):
 class CollapsibleWidget(QtWidgets.QWidget):
     """Has content widget and button on top to hide or show content"""
 
-    def __init__(
-        self, parent=None, headName="Collapse", noSpacer=True, collapsed=False
-    ):
+    def __init__(self, parent=None, headName="Collapse", noSpacer=True, collapsed=False):
         super(CollapsibleWidget, self).__init__(parent)
         self.setObjectName(self.__class__.__name__)
         self.setupUi()
@@ -68,35 +66,21 @@ class CollapsibleWidget(QtWidgets.QWidget):
         self.mainVLayout.addWidget(self.pbHead)
         self.setMinimumHeight(30)
         self.ContentWidget = QtWidgets.QWidget(self)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.ContentWidget.sizePolicy().hasHeightForWidth()
-        )
+        sizePolicy.setHeightForWidth(self.ContentWidget.sizePolicy().hasHeightForWidth())
         self.ContentWidget.setSizePolicy(sizePolicy)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy(
-                QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
-            )
-        )
+        self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred))
         self.ContentWidget.setObjectName("ContentWidget")
         self.ContentWidget.setContentsMargins(10, 0, 0, 0)
         self.mainVLayout.addWidget(self.ContentWidget)
-        self.spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        self.spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.mainVLayout.addItem(self.spacerItem)
         self.setWindowTitle(self.objectName())
         self.pbHead.setStyleSheet(self.pbHead.styleSheet() + "\nText-align:left;")
-        self.contentHiddenIcon = self.pbHead.style().standardIcon(
-            QtWidgets.QStyle.SP_TitleBarUnshadeButton
-        )
-        self.contentVisibleIcon = self.pbHead.style().standardIcon(
-            QtWidgets.QStyle.SP_TitleBarShadeButton
-        )
+        self.contentHiddenIcon = self.pbHead.style().standardIcon(QtWidgets.QStyle.SP_TitleBarUnshadeButton)
+        self.contentVisibleIcon = self.pbHead.style().standardIcon(QtWidgets.QStyle.SP_TitleBarShadeButton)
         self.updateIcon()
 
     def addWidget(self, widget):
@@ -139,16 +123,7 @@ class CollapsibleWidget(QtWidgets.QWidget):
 
 class PropertyEntry(QtWidgets.QWidget):
     """docstring for PropertyEntry."""
-
-    def __init__(
-        self,
-        label,
-        widget,
-        parent=None,
-        hideLabel=False,
-        maxLabelWidth=None,
-        toolTip="",
-    ):
+    def __init__(self, label, widget, parent=None, hideLabel=False, maxLabelWidth=None, toolTip=""):
         super(PropertyEntry, self).__init__(parent)
         self.label = label
         self.layout = QtWidgets.QHBoxLayout(self)
@@ -158,11 +133,7 @@ class PropertyEntry(QtWidgets.QWidget):
             label.setStyleSheet("font: bold")
             label.setToolTip(toolTip)
             if not maxLabelWidth:
-                label.setSizePolicy(
-                    QtWidgets.QSizePolicy(
-                        QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
-                    )
-                )
+                label.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred))
             else:
                 label.setMaximumWidth(maxLabelWidth)
             self.layout.addWidget(label)
@@ -174,17 +145,8 @@ class PropertyEntry(QtWidgets.QWidget):
 
 
 class CollapsibleFormWidget(CollapsibleWidget):
-    def __init__(
-        self,
-        parent=None,
-        headName="Collapse",
-        noSpacer=True,
-        collapsed=False,
-        hideLabels=False,
-    ):
-        super(CollapsibleFormWidget, self).__init__(
-            parent, headName=headName, noSpacer=noSpacer, collapsed=collapsed
-        )
+    def __init__(self, parent=None, headName="Collapse", noSpacer=True, collapsed=False, hideLabels=False):
+        super(CollapsibleFormWidget, self).__init__(parent, headName=headName, noSpacer=noSpacer, collapsed=collapsed)
         self.hideLabels = hideLabels
         self.Layout = QtWidgets.QVBoxLayout(self.ContentWidget)
         self.Layout.setObjectName("CollapseWidgetFormLayout")
@@ -208,31 +170,28 @@ class CollapsibleFormWidget(CollapsibleWidget):
         return count == hidden
 
     def filterContent(self, pattern):
+        count = self.Layout.count()
         for key, value in self.entryNames.items():
             if isinstance(value, PropertyEntry):
                 value.setVisible(pattern.lower() in value.getLabel().lower())
         for key, value in self.groups.items():
-            if isinstance(value, CollapsibleGroupBox):
+            if isinstance(value, CollapSibleGoupBox):
                 if value.isAllWidgetsHidden():
                     value.hide()
                 else:
                     value.show()
                     value.setCollapsed(False)
 
-    def insertWidget(
-        self, index=0, label=None, widget=None, maxLabelWidth=None, group=None
-    ):
+    def insertWidget(self, index=0, label=None, widget=None, maxLabelWidth=None, group=None):
         if widget is None or isinstance(widget, CollapsibleWidget):
             return False
         if group is not None and group != "":
             if group in self.groups:
                 groupW = self.groups[group]
             else:
-                groupW = CollapsibleGroupBox(group)
+                groupW = CollapSibleGoupBox(group)
                 self.groups[group] = groupW
-        entry = PropertyEntry(
-            str(label), widget, hideLabel=self.hideLabels, maxLabelWidth=maxLabelWidth
-        )
+        entry = PropertyEntry(str(label), widget, hideLabel=self.hideLabels, maxLabelWidth=maxLabelWidth)
         self.propertyNames[label] = widget
         self.entryNames[label] = entry
         if group is None or group == "":
@@ -249,16 +208,10 @@ class CollapsibleFormWidget(CollapsibleWidget):
             if group in self.groups:
                 groupW = self.groups[group]
             else:
-                groupW = CollapsibleGroupBox(group)
+                groupW = CollapSibleGoupBox(group)
                 self.groups[group] = groupW
         self.propertyNames[label] = widget
-        entry = PropertyEntry(
-            str(label),
-            widget,
-            hideLabel=self.hideLabels,
-            maxLabelWidth=maxLabelWidth,
-            toolTip=widget.toolTip(),
-        )
+        entry = PropertyEntry(str(label), widget, hideLabel=self.hideLabels, maxLabelWidth=maxLabelWidth, toolTip=widget.toolTip())
         self.entryNames[label] = entry
         if group is None or group == "":
             self.Layout.addWidget(entry)
@@ -273,10 +226,10 @@ class CollapsibleFormWidget(CollapsibleWidget):
         else:
             return None
 
+class CollapSibleGoupBox(QtWidgets.QWidget):
 
-class CollapsibleGroupBox(QtWidgets.QWidget):
-    def __init__(self, name):
-        super(CollapsibleGroupBox, self).__init__()
+    def __init__(self,name):
+        super(CollapSibleGoupBox, self).__init__()
 
         # widgets
         self.controlGroup = QtWidgets.QGroupBox()
@@ -290,7 +243,8 @@ class CollapsibleGroupBox(QtWidgets.QWidget):
         self.controlGroup.setFixedHeight(self.controlGroup.sizeHint().height())
 
         # signals
-        self.controlGroup.toggled.connect(lambda: self.toggleCollapsed())
+        self.controlGroup.toggled.connect(
+            lambda: self.toggleCollapsed())
 
         # layout
         self.mainLayout = QtWidgets.QGridLayout(self)
@@ -305,11 +259,11 @@ class CollapsibleGroupBox(QtWidgets.QWidget):
                 hidden += 1
         return count == hidden
 
-    def insertWidget(self, index, widget):
-        self.groupLayout.insertWidget(index, widget)
+    def insertWidget(self,index,widget):
+        self.groupLayout.insertWidget(index,widget)
         self.controlGroup.setFixedHeight(self.controlGroup.sizeHint().height())
 
-    def addWidget(self, widget):
+    def addWidget(self,widget):
         self.groupLayout.addWidget(widget)
         self.controlGroup.setFixedHeight(self.controlGroup.sizeHint().height())
 
@@ -327,10 +281,8 @@ class CollapsibleGroupBox(QtWidgets.QWidget):
         else:
             self.controlGroup.setFixedHeight(30)
 
-
 class PropertiesWidget(QtWidgets.QWidget):
     """docstring for PropertiesWidget."""
-
     spawnDuplicate = QtCore.Signal()
 
     def __init__(self, parent=None, searchByHeaders=False):
@@ -341,10 +293,8 @@ class PropertiesWidget(QtWidgets.QWidget):
         self.mainLayout.setContentsMargins(2, 2, 2, 2)
         self.searchBox = QtWidgets.QLineEdit(self)
         self.searchBox.setObjectName("lineEdit")
-        self.searchBox.setPlaceholderText("search...")
-        self.searchBox.textChanged.connect(
-            self.filterByHeaders if searchByHeaders else self.filterByHeadersAndFields
-        )
+        self.searchBox.setPlaceholderText(str("search..."))
+        self.searchBox.textChanged.connect(self.filterByHeaders if searchByHeaders else self.filterByHeadersAndFields)
         self.searchBoxWidget = QtWidgets.QWidget()
         self.searchBoxLayout = QtWidgets.QHBoxLayout(self.searchBoxWidget)
         self.searchBoxLayout.setContentsMargins(1, 1, 1, 1)
@@ -357,12 +307,12 @@ class PropertiesWidget(QtWidgets.QWidget):
         # self.settingsMenu.addAction(self.editPropertiesAction)
         # self.settingsButton.setMenu(self.settingsMenu)
         # self.editPropertiesAction.triggered.connect(self.showPropertyEditor)
-        # self.settingsButton.clicked.connect(self.spawnDuplicate.emit)
+        #self.settingsButton.clicked.connect(self.spawnDuplicate.emit)
         # self.settingsButton.setPopupMode(QtWidgets.QToolButton.InstantPopup)
 
         self.lockCheckBox = QtWidgets.QToolButton()
         self.lockCheckBox.setCheckable(True)
-        self.lockCheckBox.setIcon(QtGui.QIcon(":/unlocked.png"))
+        self.lockCheckBox.setIcon(QtGui.QIcon(':/unlocked.png'))
         self.lockCheckBox.toggled.connect(self.changeLockIcon)
         self.searchBoxLayout.addWidget(self.lockCheckBox)
         self.tearOffCopy = QtWidgets.QToolButton()
@@ -374,22 +324,16 @@ class PropertiesWidget(QtWidgets.QWidget):
         self.contentLayout = QtWidgets.QVBoxLayout()
         self.contentLayout.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
         self.mainLayout.addLayout(self.contentLayout)
-        self.spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        self.spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.mainLayout.addItem(self.spacerItem)
         self.mainLayout.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy(
-                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-            )
-        )
+        self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
 
-    def changeLockIcon(self, checked):
+    def changeLockIcon(self,checked):
         if checked:
-            self.lockCheckBox.setIcon(QtGui.QIcon(":/locked.png"))
+            self.lockCheckBox.setIcon(QtGui.QIcon(':/locked.png'))
         else:
-            self.lockCheckBox.setIcon(QtGui.QIcon(":/unlocked.png"))
+            self.lockCheckBox.setIcon(QtGui.QIcon(':/unlocked.png'))
 
     def setLockCheckBoxVisible(self, bVisible):
         self.lockCheckBox.setVisible(bVisible)
@@ -433,7 +377,7 @@ class PropertiesWidget(QtWidgets.QWidget):
             self.searchBoxWidget.hide()
             self.lockCheckBox.setChecked(False)
 
-    def insertWidget(self, collapsibleWidget, index):
+    def insertWidget(self, collapsibleWidget,index):
         if not self.isLocked():
             if isinstance(collapsibleWidget, CollapsibleFormWidget):
                 self.searchBoxWidget.show()
@@ -453,28 +397,30 @@ class PropertiesWidget(QtWidgets.QWidget):
         folders = {}
         for i in range(count):
             item = self.contentLayout.itemAt(i)
-            w = item.widget()
+            w = item.widget()        
             if w:
-                if w.title() in ["Inputs"]:
-                    for key, group in w.groups.items():
+                if w.title() in  ["Inputs"]:
+                    for key,group in w.groups.items():
                         if key not in folders:
                             folders[key] = {}
-                        # for e in range(group.groupLayout.count()):
+                        #for e in range(group.groupLayout.count()):
                         #    w = group.groupLayout.itemAt(e).widget()
                         #    folders[key][w.getLabel()] = group.groupLayout.itemAt(e).widget()
 
         for fold in folders:
-            tree.addFolder(fold)
+            folder = tree.addFolder(fold)
+            #for widg in folders[fold]:
+            #    child = tree.addNormal(widg,folder)
 
         d = QtWidgets.QDialog()
         d.setLayout(QtWidgets.QHBoxLayout())
         d.layout().addWidget(tree)
         d.exec_()
+        newOrder = tree.model_to_dict()
 
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
 
     s = QtWidgets.QScrollArea()

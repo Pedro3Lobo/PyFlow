@@ -8,7 +8,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from qtpy import QtCore, QtWidgets
+from Qt import QtCompat, QtCore, QtGui, QtWidgets
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -23,9 +23,7 @@ class Ui_Form(object):
         self.label = QtWidgets.QLabel(Form)
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.pbNewVar = QtWidgets.QPushButton(Form)
         self.pbNewVar.setMaximumSize(QtCore.QSize(50, 16777215))
@@ -33,9 +31,7 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.pbNewVar)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.wListWidget = QtWidgets.QWidget(Form)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.wListWidget.sizePolicy().hasHeightForWidth())
@@ -54,7 +50,7 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle("Form")
-        self.label.setText("Create var")
-        self.pbNewVar.setText( "+")
+        Form.setWindowTitle(QtCompat.translate("Form", "Form", None, -1))
+        self.label.setText(QtCompat.translate("Form", "Create var", None, -1))
+        self.pbNewVar.setText(QtCompat.translate("Form", "+", None, -1))
 

@@ -13,10 +13,11 @@
 ## limitations under the License.
 
 
+from nine import str
 from blinker import Signal
 import json
-import uuid
 
+from PyFlow import findPinClassByType
 from PyFlow import getPinDefaultValueByType
 from PyFlow.Core.Common import *
 from PyFlow.Core.Interfaces import IItemBase
@@ -40,17 +41,7 @@ class Variable(IItemBase):
     :var graph: Reference to owning graph
     :vartype graph: :class:`~PyFlow.Core.GraphBase.GraphBase`
     """
-
-    def __init__(
-        self,
-        graph,
-        value,
-        name,
-        dataType,
-        accessLevel=AccessLevel.public,
-        structure=StructureType.Single,
-        uid=None,
-    ):
+    def __init__(self, graph, value, name, dataType, accessLevel=AccessLevel.public, structure=StructureType.Single, uid=None):
         """Constructor
 
         :param graph: Owning graph
@@ -85,7 +76,7 @@ class Variable(IItemBase):
         self._accessLevel = accessLevel
         self._packageName = None
         self._uid = uuid.uuid4() if uid is None else uid
-        assert isinstance(self._uid, uuid.UUID)
+        assert(isinstance(self._uid, uuid.UUID))
         self.updatePackageName()
         self._uiWrapper = None
 
@@ -123,9 +114,9 @@ class Variable(IItemBase):
 
     @packageName.setter
     def packageName(self, value):
-        assert isinstance(value, str)
+        assert(isinstance(value, str))
         self._packageName = value
-        self.packageNameChanged.send(value)  # TODO: nonexistent, single use
+        self.packageNameChanged.send(value)
 
     @property
     def accessLevel(self):
@@ -137,7 +128,7 @@ class Variable(IItemBase):
 
     @accessLevel.setter
     def accessLevel(self, value):
-        assert isinstance(value, AccessLevel)
+        assert(isinstance(value, AccessLevel))
         self._accessLevel = value
         self.accessLevelChanged.send(value)
 
@@ -147,7 +138,7 @@ class Variable(IItemBase):
 
     @name.setter
     def name(self, value):
-        assert isinstance(value, str)
+        assert(isinstance(value, str))
         self._name = value
         self.nameChanged.send(value)
 
@@ -162,7 +153,7 @@ class Variable(IItemBase):
     @value.setter
     def value(self, value):
         # type checking if variable is not of any type
-        if not self.dataType == "AnyPin":
+        if not self.dataType == 'AnyPin':
             supportedDataTypes = findPinClassByType(self.dataType).supportedDataTypes()
             if self.dataType not in supportedDataTypes:
                 return
@@ -185,7 +176,7 @@ class Variable(IItemBase):
 
     @dataType.setter
     def dataType(self, value):
-        assert isinstance(value, str)
+        assert(isinstance(value, str))
         if value != self._dataType:
             self._dataType = value
             self.updatePackageName()
@@ -202,7 +193,7 @@ class Variable(IItemBase):
 
     @structure.setter
     def structure(self, value):
-        assert isinstance(value, StructureType)
+        assert(isinstance(value, StructureType))
         if value != self._structure:
             self._structure = value
             if self._structure == StructureType.Array:
@@ -217,7 +208,7 @@ class Variable(IItemBase):
 
     @uid.setter
     def uid(self, value):
-        assert isinstance(value, uuid.UUID)
+        assert(isinstance(value, uuid.UUID))
         self.graph.getVars()[value] = self.graph.getVars().pop(self._uid)
         self._uid = value
 
@@ -228,45 +219,45 @@ class Variable(IItemBase):
 
         uidString = str(self.uid)
 
-        template["name"] = self.name
-        if self.dataType == "AnyPin":
-            template["value"] = None
+        template['name'] = self.name
+        if self.dataType == 'AnyPin':
+            template['value'] = None
         else:
-            template["value"] = json.dumps(self.value, cls=pinClass.jsonEncoderClass())
+            template['value'] = json.dumps(self.value, cls=pinClass.jsonEncoderClass())
         if self.structure == StructureType.Dict:
             template["dictKeyType"] = self.value.keyType
             template["dictValueType"] = self.value.valueType
         else:
-            template["dataType"] = self.dataType
-        template["structure"] = self.structure.name
-        template["accessLevel"] = self.accessLevel.name
-        template["package"] = self._packageName
-        template["uuid"] = uidString
+            template['dataType'] = self.dataType
+        template['structure'] = self.structure.name
+        template['accessLevel'] = self.accessLevel.name
+        template['package'] = self._packageName
+        template['uuid'] = uidString
 
         return template
 
     @staticmethod
     def deserialize(graph, jsonData, *args, **kwargs):
-        name = jsonData["name"]
+        name = jsonData['name']
 
         dataType = "BoolPin"
         if jsonData["structure"] == StructureType.Dict.name:
-            keyDataType = jsonData["dictKeyType"]
-            valueDataType = jsonData["dictValueType"]
+            keyDataType = jsonData['dictKeyType']
+            valueDataType = jsonData['dictValueType']
 
             value = PFDict(keyDataType, valueDataType)
         else:
-            dataType = jsonData["dataType"]
+            dataType = jsonData['dataType']
 
             if dataType != "AnyPin":
                 pinClass = findPinClassByType(dataType)
-                value = json.loads(jsonData["value"], cls=pinClass.jsonDecoderClass())
+                value = json.loads(jsonData['value'], cls=pinClass.jsonDecoderClass())
             else:
                 value = getPinDefaultValueByType("AnyPin")
 
-        accessLevel = AccessLevel[jsonData["accessLevel"]]
-        structure = StructureType[jsonData["structure"]]
-        uid = uuid.UUID(jsonData["uuid"])
+        accessLevel = AccessLevel[jsonData['accessLevel']]
+        structure = StructureType[jsonData['structure']]
+        uid = uuid.UUID(jsonData['uuid'])
         return Variable(graph, value, name, dataType, accessLevel, structure, uid)
 
     @staticmethod
@@ -276,11 +267,11 @@ class Variable(IItemBase):
         :rtype: dict
         """
         template = {
-            "name": None,
-            "value": None,
-            "dataType": None,
-            "accessLevel": None,
-            "package": None,
-            "uuid": None,
+            'name': None,
+            'value': None,
+            'dataType': None,
+            'accessLevel': None,
+            'package': None,
+            'uuid': None
         }
         return template

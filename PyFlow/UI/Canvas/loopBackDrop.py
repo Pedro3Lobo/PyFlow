@@ -12,9 +12,9 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-from qtpy import QtGui
-from qtpy import QtCore
-from qtpy.QtWidgets import QGraphicsWidget
+from Qt import QtGui
+from Qt import QtCore
+from Qt.QtWidgets import QGraphicsWidget
 
 
 class backDrop(QGraphicsWidget):
@@ -22,10 +22,7 @@ class backDrop(QGraphicsWidget):
         super(backDrop, self).__init__()
         self.parent = parent
         self.rect = QtCore.QRectF()
-        try:
-            self.parent._rawNode.killed.connect(self.parentNodeKilled)
-        except:
-            pass
+        self.parent._rawNode.killed.connect(self.parentNodeKilled)
 
     def parentNodeKilled(self, *args):
         scene = self.scene()
@@ -35,10 +32,7 @@ class backDrop(QGraphicsWidget):
 
     def boundingRect(self):
         try:
-            return QtCore.QRectF(
-                QtCore.QPointF(self.parent.left - 5, self.parent.top + 5),
-                QtCore.QPointF(self.parent.right + 5, self.parent.down - 5),
-            )
+            return QtCore.QRectF(QtCore.QPointF(self.parent.left - 5, self.parent.top + 5), QtCore.QPointF(self.parent.right + 5, self.parent.down - 5))
         except:
             return QtCore.QRectF(0, 0, 0, 0)
 

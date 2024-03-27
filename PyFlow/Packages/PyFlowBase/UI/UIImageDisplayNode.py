@@ -13,10 +13,10 @@
 ## limitations under the License.
 
 
-from qtpy import QtGui
+from Qt import QtGui
 from PyFlow.UI import RESOURCES_DIR
 from PyFlow.UI.Canvas.UINodeBase import UINodeBase
-from qtpy.QtWidgets import QLabel
+from Qt.QtWidgets import QLabel
 
 
 class UIImageDisplayNode(UINodeBase):
@@ -38,5 +38,6 @@ class UIImageDisplayNode(UINodeBase):
         super(UIImageDisplayNode, self).paint(painter, option, widget)
 
     def updateSize(self):
-        scaledPixmap = self.pixmap.scaledToWidth(self.customLayout.geometry().width())
+        scaledPixmap = self.pixmap.scaledToWidth(
+            self.customLayout.geometry().width())
         self.Imagelabel.setPixmap(scaledPixmap)

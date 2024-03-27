@@ -25,7 +25,7 @@ class DefaultEvaluationEngine_Impl(IEvaluationEngine):
         super(DefaultEvaluationEngine_Impl, self).__init__()
 
     @staticmethod
-    def old_getPinData(pin):
+    def getPinData(pin):
         if not pin.hasConnections():
             return pin.currentData()
 
@@ -42,25 +42,7 @@ class DefaultEvaluationEngine_Impl(IEvaluationEngine):
         return pin.currentData()
 
     @staticmethod
-    def getPinData(pin):
-        if not pin.hasConnections():
-            return pin.currentData()
-
-        bOwningNodeCallable = pin.owningNode().bCallable
-
-        if not pin.dirty:
-            return pin.currentData()
-        
-        order = DefaultEvaluationEngine_Impl.getEvaluationOrderIterative(pin.owningNode())
-        [node.processNode() for node in order]
-
-        #if pin.dirty:
-        #    pin.owningNode().processNode()
-
-        return pin.currentData()
-
-    @staticmethod
-    def getEvaluationOrderIterative(node, forward=False):
+    def getEvaluationOrderIterative(node,forward=False):
         visited = set()
         stack = [node]
         order = []
@@ -93,7 +75,6 @@ class DefaultEvaluationEngine_Impl(IEvaluationEngine):
                 if lhsNode not in visited:
                     dfsWalk(lhsNode)
             order.append(n)
-
         dfsWalk(node)
         order.pop()
         return order
@@ -118,7 +99,7 @@ class DefaultEvaluationEngine_Impl(IEvaluationEngine):
                     for outPin in affectedByPins:
                         outPinNode = outPin.owningNode()
                         if not outPinNode.bCallable:
-                            # if node.isDirty():
+                            #if node.isDirty():
                             nodes.add(outPinNode)
         elif node.__class__.__name__ == "graphInputs":
             # graph inputs node
@@ -156,7 +137,6 @@ class DefaultEvaluationEngine_Impl(IEvaluationEngine):
                     owningNode = outPin.owningNode()
                     nodes.add(owningNode)
         return nodes
-
 
 @SingletonDecorator
 class EvaluationEngine(object):

@@ -15,8 +15,8 @@
 
 import os
 
-from qtpy import QtCore
-from qtpy.QtWidgets import *
+from Qt import QtCore
+from Qt.QtWidgets import *
 
 from PyFlow.UI.EditorHistory import EditorHistory
 from PyFlow.UI.Widgets.PropertiesFramework import CollapsibleFormWidget
@@ -25,7 +25,6 @@ from PyFlow.UI.Widgets.PreferencesWindow import CategoryWidgetBase
 
 class GeneralPreferences(CategoryWidgetBase):
     """docstring for GeneralPreferences."""
-
     def __init__(self, parent=None):
         super(GeneralPreferences, self).__init__(parent)
         self.layout = QVBoxLayout(self)
@@ -33,14 +32,12 @@ class GeneralPreferences(CategoryWidgetBase):
         self.layout.setSpacing(2)
 
         commonCategory = CollapsibleFormWidget(headName="Common")
-        defaultTempFolder = os.path.join(os.path.expanduser("~"), "PyFlowTemp")
+        defaultTempFolder = os.path.join(os.path.expanduser('~'), "PyFlowTemp")
         defaultTempFolder = os.path.normpath(defaultTempFolder)
         self.tempFilesDir = QLineEdit(defaultTempFolder)
         commonCategory.addWidget("TempFilesDir", self.tempFilesDir)
         self.additionalPackagePaths = QLineEdit("")
-        commonCategory.addWidget(
-            "Additional package locations", self.additionalPackagePaths
-        )
+        commonCategory.addWidget("Additional package locations", self.additionalPackagePaths)
         self.layout.addWidget(commonCategory)
 
         self.lePythonEditor = QLineEdit("sublime_text.exe @FILE")
@@ -51,7 +48,6 @@ class GeneralPreferences(CategoryWidgetBase):
 
         def setHistoryCapacity():
             EditorHistory().capacity = self.historyDepth.value()
-
         self.historyDepth.editingFinished.connect(setHistoryCapacity)
         commonCategory.addWidget("History depth", self.historyDepth)
 
@@ -63,7 +59,7 @@ class GeneralPreferences(CategoryWidgetBase):
 
     def initDefaults(self, settings):
         settings.setValue("EditorCmd", "sublime_text.exe @FILE")
-        settings.setValue("TempFilesDir", os.path.expanduser("~/PyFlowTemp"))
+        settings.setValue("TempFilesDir", os.path.expanduser('~/PyFlowTemp'))
         settings.setValue("HistoryDepth", 50)
         settings.setValue("RedirectOutput", True)
 
@@ -72,9 +68,7 @@ class GeneralPreferences(CategoryWidgetBase):
         settings.setValue("TempFilesDir", self.tempFilesDir.text())
         settings.setValue("ExtraPackageDirs", self.additionalPackagePaths.text())
         settings.setValue("HistoryDepth", self.historyDepth.value())
-        settings.setValue(
-            "RedirectOutput", self.redirectOutput.checkState() == QtCore.Qt.Checked
-        )
+        settings.setValue("RedirectOutput", self.redirectOutput.checkState() == QtCore.Qt.Checked)
 
     def onShow(self, settings):
         self.lePythonEditor.setText(settings.value("EditorCmd"))

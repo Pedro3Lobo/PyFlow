@@ -23,27 +23,11 @@ class makeDictElement(NodeBase):
     def __init__(self, name):
         super(makeDictElement, self).__init__(name)
         self.bCacheEnabled = False
-        self.key = self.createInputPin(
-            "key",
-            "AnyPin",
-            structure=StructureType.Single,
-            constraint="1",
-            supportedPinDataTypes=getHashableDataTypes(),
-        )
-        self.value = self.createInputPin(
-            "value", "AnyPin", structure=StructureType.Multi, constraint="2"
-        )
+        self.key = self.createInputPin('key', 'AnyPin', structure=StructureType.Single, constraint="1", supportedPinDataTypes=getHashableDataTypes())
+        self.value = self.createInputPin('value', 'AnyPin', structure=StructureType.Multi, constraint="2")
         self.value.enableOptions(PinOptions.AllowAny)
-        self.outArray = self.createOutputPin(
-            "out",
-            "AnyPin",
-            defaultValue=DictElement(),
-            structure=StructureType.Single,
-            constraint="2",
-        )
-        self.outArray.enableOptions(
-            PinOptions.AllowAny | PinOptions.DictElementSupported
-        )
+        self.outArray = self.createOutputPin('out', 'AnyPin', defaultValue=DictElement(), structure=StructureType.Single, constraint="2")
+        self.outArray.enableOptions(PinOptions.AllowAny | PinOptions.DictElementSupported)
         self.outArray.onPinConnected.connect(self.outPinConnected)
         self.outArray.onPinDisconnected.connect(self.outPinDisConnected)
         self.key.dataBeenSet.connect(self.dataBeenSet)
@@ -52,8 +36,8 @@ class makeDictElement(NodeBase):
     @staticmethod
     def pinTypeHints():
         helper = NodePinsSuggestionsHelper()
-        helper.addInputDataType("AnyPin")
-        helper.addOutputDataType("AnyPin")
+        helper.addInputDataType('AnyPin')
+        helper.addOutputDataType('AnyPin')
         helper.addInputStruct(StructureType.Single)
         helper.addInputStruct(StructureType.Multi)
         helper.addOutputStruct(StructureType.Single)
@@ -61,7 +45,7 @@ class makeDictElement(NodeBase):
 
     @staticmethod
     def category():
-        return "GenericTypes"
+        return 'GenericTypes'
 
     @staticmethod
     def keywords():
@@ -69,7 +53,7 @@ class makeDictElement(NodeBase):
 
     @staticmethod
     def description():
-        return "Creates a Dict Element"
+        return 'Creates a Dict Element'
 
     def dataBeenSet(self, pin=None):
         try:
@@ -83,7 +67,7 @@ class makeDictElement(NodeBase):
         if dictNode:
             if dictNode.KeyType in self.constraints[self.key.constraint]:
                 self.constraints[self.key.constraint].remove(dictNode.KeyType)
-            if self.key in dictNode.constraints[self.key.constraint]:
+            if self.key in dictNode.constraints[self.key.constraint]:    
                 dictNode.constraints[self.key.constraint].remove(self.key)
         self.outPinConnected(self.outArray)
 

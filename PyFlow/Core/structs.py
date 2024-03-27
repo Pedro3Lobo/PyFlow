@@ -15,7 +15,6 @@
 
 class Tick(object):
     """ Element For Ramp Widget Basic U and V Attribute holder """
-
     def __init__(self):
         self._u = 0
         self._v = 0
@@ -42,7 +41,6 @@ class Tick(object):
 
 class splineRamp(object):
     """ Ramp/Curve Editor with evaluateAt support , clamped to 0-1 in both x and y"""
-
     def __init__(self):
         self.items = []
 
@@ -73,7 +71,7 @@ class splineRamp(object):
         item.setU(u)
         item.setV(v)
         self.items.append(item)
-        return item
+        return(item)
 
     def removeItem(self, item=None, index=-1):
         if item:
@@ -102,15 +100,9 @@ class splineRamp(object):
                 if isinstance(items[0].getV(), list):
                     v = []
                     for i in range(len(items[0].getV())):
-                        v.append(
-                            self.interpolateBezier(
-                                [p.getV()[i] for p in items], 0, len(items) - 1, value
-                            )
-                        )
+                        v.append(self.interpolateBezier([p.getV()[i] for p in items], 0, len(items) - 1, value))
                 else:
-                    v = self.interpolateBezier(
-                        [p.getV() for p in items], 0, len(items) - 1, value
-                    )
+                    v = self.interpolateBezier([p.getV() for p in items], 0, len(items) - 1, value)
             else:
                 interval = len(items) - 1
                 for i, x in enumerate(items):
@@ -118,25 +110,12 @@ class splineRamp(object):
                         interval = i
                         break
 
-                u = max(
-                    0,
-                    min(
-                        1,
-                        (
-                            ((value - items[interval - 1].getU()) * (1.0 - 0.0))
-                            / (items[interval].getU() - items[interval - 1].getU())
-                        )
-                        + 0.0,
-                    ),
-                )
+                u = max(0, min(1, (((value - items[interval - 1].getU()) * (1.0 - 0.0)) / (
+                    items[interval].getU() - items[interval - 1].getU())) + 0.0))
 
                 start = items[interval].getV()
                 end = items[interval - 1].getV()
-                if (
-                    isinstance(start, list)
-                    and isinstance(end, list)
-                    and len(start) == len(end)
-                ):
+                if isinstance(start, list) and isinstance(end, list) and len(start) == len(end):
                     v = []
                     for i, element in enumerate(start):
                         v.append(self.interpolateLinear(start[i], end[i], u))
@@ -152,17 +131,12 @@ class splineRamp(object):
     def interpolateBezier(self, coorArr, i, j, t):
         if j == 0:
             return coorArr[i]
-        return (
-            self.interpolateBezier(coorArr, i, j - 1, t) * (1 - t)
-            + self.interpolateBezier(coorArr, i + 1, j - 1, t) * t
-        )
+        return self.interpolateBezier(coorArr, i, j - 1, t) * (1 - t) + self.interpolateBezier(coorArr, i + 1, j - 1, t) * t
 
-    @staticmethod
-    def interpolateLinear(start, end, ratio):
-        return ratio * start + (1 - ratio) * end
+    def interpolateLinear(self, start, end, ratio):
+        return (ratio * start + (1 - ratio) * end)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     ramp = splineRamp()
     ramp.addItem(0.1, [0.0, 0.0, 0.0])
     ramp.addItem(1.0, [1.0, 1.0, 1.0])

@@ -13,16 +13,17 @@
 ## limitations under the License.
 
 
+from nine import str
 from PyFlow.UI.Tool.Tool import ShelfTool
 from PyFlow.Packages.PyFlowBase.Tools import RESOURCES_DIR
 from PyFlow.Core.Common import Direction
 
-from qtpy import QtGui
+from Qt import QtGui
+from Qt.QtWidgets import QFileDialog
 
 
 class AlignRightTool(ShelfTool):
     """docstring for AlignRightTool."""
-
     def __init__(self):
         super(AlignRightTool, self).__init__()
 
@@ -36,7 +37,7 @@ class AlignRightTool(ShelfTool):
 
     @staticmethod
     def name():
-        return "AlignRightTool"
+        return str("AlignRightTool")
 
     def do(self):
         self.pyFlowInstance.getCanvas().alignSelectedNodes(Direction.Right)

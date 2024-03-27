@@ -8,7 +8,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from qtpy import QtCore, QtGui, QtWidgets
+from Qt import QtCompat, QtCore, QtGui, QtWidgets
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -24,9 +24,7 @@ class Ui_Form(object):
         self.labelName = QtWidgets.QLabel(Form)
         self.labelName.setObjectName("labelName")
         self.horizontalLayout.addWidget(self.labelName)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.pbKill = QtWidgets.QPushButton(Form)
         self.pbKill.setMaximumSize(QtCore.QSize(40, 16777215))
@@ -38,6 +36,6 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle("Form")
-        self.labelName.setText("var name")
+        Form.setWindowTitle(QtCompat.translate("Form", "Form", None, -1))
+        self.labelName.setText(QtCompat.translate("Form", "var name", None, -1))
 

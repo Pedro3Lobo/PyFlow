@@ -1,7 +1,8 @@
+from nine import str
 from PyFlow.UI.Tool.Tool import ShelfTool
 from PyFlow.Core.Common import Direction
 
-from qtpy import QtGui
+from Qt import QtGui
 
 
 class DemoShelfTool(ShelfTool):
@@ -19,7 +20,7 @@ class DemoShelfTool(ShelfTool):
 
     @staticmethod
     def name():
-        return "DemoShelfTool"
+        return str("DemoShelfTool")
 
     def do(self):
         print("Greet!")

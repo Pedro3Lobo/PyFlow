@@ -1,13 +1,12 @@
-from qtpy.QtWidgets import *
-
+from Qt import QtCore
+from Qt.QtWidgets import *
 
 class FileDialog(QFileDialog):
     """docstring for ExecInputWidget"""
-
-    def __init__(self, mode="all", multifile=False, parent=None, **kwargs):
-        super(FileDialog, self).__init__(parent=parent, **kwargs)
+    def __init__(self, mode="all", multifile=False, parent=None, **kwds):
+        super(FileDialog, self).__init__(parent=parent, **kwds)
         self.setOption(QFileDialog.DontUseNativeDialog, True)
-        if mode == "all":
+        if mode == "all":        
             self.setFileMode(QFileDialog.Directory)
             for but in self.findChildren(QPushButton):
                 if "open" in but.text().lower() or "choose" in but.text().lower():
@@ -19,7 +18,7 @@ class FileDialog(QFileDialog):
 
         elif mode == "directory":
             self.setFileMode(QFileDialog.DirectoryOnly)
-
+            
         if multifile:
             self.listView = self.findChild(QListView)
             if self.listView:

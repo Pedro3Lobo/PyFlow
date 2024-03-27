@@ -1,6 +1,24 @@
-PySide6
-qtpy
+aenum; python_version < '3.4'
 blinker
+certifi
+charset-normalizer
 docutils
-SQLAlchemy
+greenlet
+idna
+numpy
+packaging
+pip
+pylsl
+pyqtgraph
+PySide6           
+PySide6_Addons
+PySide6_Essentials
+QtPy
 requests
+scipy
+setuptools
+shiboken6
+SQLAlchemy
+typing_extensions
+urllib3
+wheel

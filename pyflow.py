@@ -15,37 +15,16 @@
 
 import sys
 from PyFlow.App import PyFlow
-from qtpy.QtWidgets import QApplication
-import argparse
-import os
-import json
+from Qt.QtWidgets import QApplication
 
 
-def main():    
+def main():
     app = QApplication(sys.argv)
 
     instance = PyFlow.instance(software="standalone")
     if instance is not None:
-        instance.activateWindow()
+        app.setActiveWindow(instance)
         instance.show()
-        
-        parser = argparse.ArgumentParser(description="PyFlow CLI")
-        parser.add_argument("-f", "--filePath", type=str, default="Untitled.pygraph")
-        parsedArguments, unknown = parser.parse_known_args(sys.argv[1:])
-        filePath = parsedArguments.filePath
-        if not filePath.endswith(".pygraph"):
-            filePath += ".pygraph"
-        if os.path.exists(filePath):
-                with open(filePath, 'r') as f:
-                    data = json.load(f)
-                    instance.loadFromData(data)
-                    instance.currentFileName = filePath
-                    
-        try:
-            sys.exit(app.exec_())
-        except Exception as e:
-            print(e)
-
 
         try:
             sys.exit(app.exec_())
@@ -53,5 +32,5 @@ def main():
             print(e)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

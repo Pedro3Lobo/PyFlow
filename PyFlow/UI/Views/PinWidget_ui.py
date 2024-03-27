@@ -8,15 +8,13 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from qtpy import QtCore, QtGui, QtWidgets
+from Qt import QtCompat, QtCore, QtGui, QtWidgets
 
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(168, 75)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
@@ -28,9 +26,7 @@ class Ui_Form(object):
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.lePinName = QtWidgets.QLineEdit(Form)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lePinName.sizePolicy().hasHeightForWidth())
@@ -40,9 +36,7 @@ class Ui_Form(object):
         self.lePinName.setObjectName("lePinName")
         self.horizontalLayout.addWidget(self.lePinName)
         self.cbType = QtWidgets.QComboBox(Form)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cbType.sizePolicy().hasHeightForWidth())
@@ -55,9 +49,7 @@ class Ui_Form(object):
         self.cbHideLabel = QtWidgets.QCheckBox(Form)
         self.cbHideLabel.setObjectName("cbHideLabel")
         self.horizontalLayout_2.addWidget(self.cbHideLabel)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
@@ -65,8 +57,8 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle("Form")
-        self.lePinName.setText("pinName")
-        self.cbHideLabel.setToolTip("should hide label")
-        self.cbHideLabel.setText("hide label")
+        Form.setWindowTitle(QtCompat.translate("Form", "Form", None, -1))
+        self.lePinName.setText(QtCompat.translate("Form", "pinName", None, -1))
+        self.cbHideLabel.setToolTip(QtCompat.translate("Form", "should hide label", None, -1))
+        self.cbHideLabel.setText(QtCompat.translate("Form", "hide label", None, -1))
 

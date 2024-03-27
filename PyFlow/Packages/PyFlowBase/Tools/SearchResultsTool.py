@@ -13,16 +13,18 @@
 ## limitations under the License.
 
 
-from qtpy import QtCore
-from qtpy.QtWidgets import *
+from nine import str
+from Qt import QtCore
+from Qt import QtGui
+from Qt.QtWidgets import *
 
+from PyFlow.Packages.PyFlowBase.Tools import RESOURCES_DIR
 from PyFlow.UI.Tool.Tool import DockTool
 from PyFlow.UI.Widgets.PropertiesFramework import *
 
 
 class SearchResultsTool(DockTool):
     """docstring for NodeBox tool."""
-
     def __init__(self):
         super(SearchResultsTool, self).__init__()
         self.layout().setSpacing(0)
@@ -41,7 +43,7 @@ class SearchResultsTool(DockTool):
         self.content.setLockCheckBoxVisible(False)
         self.content.setTearOffCopyVisible(False)
 
-        self.content.setObjectName("SearchResults")
+        self.content.setObjectName("SearchResultstent")
         self.scrollArea.setWidget(self.content)
         self.setWindowTitle(self.uniqueName())
         self.setWidget(self.scrollArea)
@@ -53,11 +55,7 @@ class SearchResultsTool(DockTool):
         for node in uiNodesList:
             locationString = ">".join(node.location())
             btn = QPushButton(locationString)
-            btn.clicked.connect(
-                lambda checked=False, n=node: self.pyFlowInstance.getCanvas().frameItems(
-                    [n]
-                )
-            )
+            btn.clicked.connect(lambda checked=False, n=node: self.pyFlowInstance.getCanvas().frameItems([n]))
             category.addWidget(node.getName(), btn)
         self.content.addWidget(category)
 
@@ -67,9 +65,7 @@ class SearchResultsTool(DockTool):
 
     def onShow(self):
         super(SearchResultsTool, self).onShow()
-        self.pyFlowInstance.getCanvas().requestShowSearchResults.connect(
-            self.onShowNodesResults
-        )
+        self.pyFlowInstance.getCanvas().requestShowSearchResults.connect(self.onShowNodesResults)
 
     @staticmethod
     def toolTip():
@@ -81,4 +77,4 @@ class SearchResultsTool(DockTool):
 
     @staticmethod
     def name():
-        return "Search results"
+        return str("Search results")

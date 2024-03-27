@@ -13,10 +13,12 @@
 ## limitations under the License.
 
 
-from qtpy import QtCore
-from qtpy import QtGui
-from qtpy.QtWidgets import *
+from nine import str
+from Qt import QtCore
+from Qt import QtGui
+from Qt.QtWidgets import *
 
+from PyFlow.Packages.PyFlowBase.Tools import RESOURCES_DIR
 from PyFlow.UI.Tool.Tool import DockTool
 from PyFlow.UI.EditorHistory import EditorHistory
 
@@ -122,4 +124,4 @@ class HistoryTool(DockTool):
 
     @staticmethod
     def name():
-        return "History"
+        return str("History")

@@ -13,23 +13,23 @@
 ## limitations under the License.
 
 
+from nine import str
 from blinker import Signal
 
 from PyFlow.Core.GraphBase import GraphBase
 from PyFlow.Core.Common import *
 from PyFlow.Core import version
 
-ROOT_GRAPH_NAME = "root"
+ROOT_GRAPH_NAME = str('root')
 
 
 class GraphManager(object):
     """Data structure that holds graph tree
 
     This class switches active graph. Can insert or remove graphs to tree,
-    can search nodes and variables across all graphs. Also, this class responsible
+    can search nodes and variables across all graphs. Also this class responsible
     for giving unique names.
     """
-
     def __init__(self):
         super(GraphManager, self).__init__()
         self.terminationRequested = False  #: used by cli only
@@ -48,7 +48,7 @@ class GraphManager(object):
         for graph in self.getAllGraphs():
             if graph.isRoot():
                 roots.append(graph)
-        assert len(roots) == 1, "Fatal! Multiple roots!"
+        assert(len(roots) == 1), "Fatal! Multiple roots!"
         return roots[0]
 
     def selectRootGraph(self):
@@ -105,12 +105,12 @@ class GraphManager(object):
         :type data: dict
         """
         if "fileVersion" in data:
-            fileVersion = version.Version.fromString(data["fileVersion"])  # TODO: find purpose
+            fileVersion = version.Version.fromString(data["fileVersion"])
         else:
             # handle older version
             pass
         self.clear(keepRoot=False)
-        self._activeGraph = GraphBase(str("root"), self)
+        self._activeGraph = GraphBase(str('root'), self)
         self._activeGraph.populateFromJson(data)
         self._activeGraph.setIsRoot(True)
         self.selectGraph(self._activeGraph)
@@ -149,7 +149,7 @@ class GraphManager(object):
         :rtype: list(:class:`~PyFlow.Core.NodeBase.NodeBase`)
         """
         result = []
-        for node in self.getAllNodes(classNameFilters=["getVar", "setVar"]):
+        for node in self.getAllNodes(classNameFilters=['getVar', 'setVar']):
             if node.variableUid() == variable.uid:
                 result.append(node)
         return result
@@ -265,6 +265,7 @@ class GraphManager(object):
         graphs = self.getGraphsDict()
         if name in graphs:
             if name != self.activeGraph().name:
+                oldGraph = self.activeGraph()
                 newGraph = graphs[name]
                 self._activeGraph = newGraph
                 self.graphChanged.send(self.activeGraph())
@@ -278,6 +279,7 @@ class GraphManager(object):
         for newGraph in self.getAllGraphs():
             if newGraph.name == graph.name:
                 if newGraph.name != self.activeGraph().name:
+                    oldGraph = self.activeGraph()
                     self._activeGraph = newGraph
                     self.graphChanged.send(self.activeGraph())
                     break
@@ -289,27 +291,19 @@ class GraphManager(object):
         """
         return [g for g in self._graphs.values()]
 
-    def getAllNodes(self, classNameFilters=None):
+    def getAllNodes(self, classNameFilters=[]):
         """Returns all nodes across all graphs
 
         :param classNameFilters: If class name filters specified, only those node classes will be considered
         :type classNameFilters: list(str)
         :rtype: list(:class:`~PyFlow.Core.NodeBase.NodeBase`)
         """
-        if classNameFilters is None:
-            classNameFilters = []
         allNodes = []
         for graph in self.getAllGraphs():
             if len(classNameFilters) == 0:
                 allNodes.extend(list(graph.getNodes().values()))
             else:
-                allNodes.extend(
-                    [
-                        node
-                        for node in graph.getNodes().values()
-                        if node.__class__.__name__ in classNameFilters
-                    ]
-                )
+                allNodes.extend([node for node in graph.getNodes().values() if node.__class__.__name__ in classNameFilters])
         return allNodes
 
     def getAllVariables(self):
@@ -322,8 +316,7 @@ class GraphManager(object):
             result.extend(list(graph.getVars().values()))
         return result
 
-    @staticmethod
-    def getUniqGraphPinName(graph, name):
+    def getUniqGraphPinName(self, graph, name):
         """Returns unique pin name for graph
 
         Used by compound node and graphInputs graphOutputs nodes.
@@ -337,9 +330,7 @@ class GraphManager(object):
         :rtype: str
         """
         existingNames = []
-        for node in graph.getNodesList(
-            classNameFilters=["graphInputs", "graphOutputs"]
-        ):
+        for node in graph.getNodesList(classNameFilters=['graphInputs', 'graphOutputs']):
             existingNames.extend([pin.name for pin in node.pins])
         return getUniqNameFromList(existingNames, name)
 
@@ -401,11 +392,7 @@ class GraphManager(object):
         """Prints all data to console. May be useful for debugging
         """
         root = self.findRootGraph()
-        print(
-            "Active graph: {0}".format(str(self.activeGraph().name)),
-            "All graphs:",
-            [g.name for g in self._graphs.values()],
-        )
+        print("Active graph: {0}".format(str(self.activeGraph().name)), "All graphs:", [g.name for g in self._graphs.values()])
         root.plot()
 
 
@@ -413,7 +400,6 @@ class GraphManager(object):
 class GraphManagerSingleton(object):
     """Singleton class that holds graph manager instance inside. Used by app as main graph manager
     """
-
     def __init__(self):
         self.man = GraphManager()
 
